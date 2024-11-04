@@ -1,8 +1,8 @@
 from math import *
 YesList = ['y','Y','Yes','yes','true','True','yeah'] #used with searchList to check for affirmative inputs
 NoList = ['N','n','No','no','false','False','nah'] #used with searchList to check for non-affirmative inputs (im blanking on the word, ok)
-def makeDegrees(rad):
-    return 180*(rad/pi)
+def makeDegrees(angle):
+    return 180*(angle/pi)
 def makeRadians(angle):
     return pi*(angle/180)
 def string_angle(angle):
