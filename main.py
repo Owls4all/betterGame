@@ -6,7 +6,20 @@ import time
 
 core = Tk()
 core.title('Super epic game (definitely no exaggeration whatsoever)')
+#-------------Variable setup------------------#
+Stats = ['strength','defense','health','agility','inteligence']
+class Item:
+    def __init__(self,slot,name,strength,defense,health,agility,intelligence):
+        self.slot=slot
+        self.name=name
+        self.strength=strength
+        self.defense=defense
+        self.health = health
+        self.agility = agility
+        self.intelligence = intelligence
+        
 
+#---------------------------------------------#
 menubar = Menu(core)
 #------------------Game Menu------------------#
 game = Menu(menubar,tearoff=0)
@@ -26,6 +39,12 @@ actions.add_command(label= 'Focus', command = None)
 #-----------------Magic Menu------------------#
 magic = Menu(menubar,tearoff=0)
 menubar.add_cascade(label='Magic',menu=magic)
+#---------------------------------------------#
+
+#---------------Inventory Menu----------------#
+stuff = Menu(menubar,tearoff=0)
+menubar.add_cascade(label='Inventory',menu=stuff)
+
 #---------------------------------------------#
 
 core.config(menu = menubar)
