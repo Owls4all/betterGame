@@ -13,8 +13,3 @@ def searchList(quarry,list):
             return True
     return False
 
-list = [4,7,'penguin','potato','bicycle']
-if searchList('potato',list):
-    print('dinosaur')
-else:
-    print('something is wrong')
