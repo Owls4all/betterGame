@@ -3,6 +3,7 @@ from tkinter import *
 import utility 
 import random
 from items import *
+from rooms import *
 
 core = Tk()
 core.title('Super epic game (definitely no exaggeration whatsoever)')
