@@ -8,4 +8,6 @@ class Item:
         self.agility = agility
         self.intelligence = intelligence
 
-cardboardHelm= Item('head','Cardboard Helm',0,2,0,2,5)
+cardboardHelm = Item('head','Cardboard Helm',0,2,0,2,5)
+scaleMail = Item('chest','Scale Mail',5,10,10,0,5)
+rustyBlade = Item('weapon','Rusty Blade',7,0,0,2,0)

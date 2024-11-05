@@ -20,8 +20,9 @@ belts=[]
 boots=[]
 gloves=[]
 bracers=[]
-weapons=[]
+weapons=[rustyBlade]
 
+undiscovered=[cardboardHelm,scaleMail]
 
 
 
