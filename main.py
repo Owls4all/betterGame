@@ -14,16 +14,16 @@ core.title('Super epic game (definitely no exaggeration whatsoever)')
 #the slots for items are head, neck, chest, belt, feet, hands, arms, weapon
   
 
-helmets=[]
+helmets=[cardboardHelm]
 necklaces=[]
-armors=[]
+armors=[tunic]
 belts=[]
-boots=[]
+boots=[wornBoots]
 gloves=[]
 bracers=[]
 weapons=[rustyBlade]
 
-undiscovered=[cardboardHelm,scaleMail]
+undiscovered=[speedPendant,scaleMail,mithrilGloves,strengthBelt,armorBracers]
 
 
 
