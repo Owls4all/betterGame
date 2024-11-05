@@ -7,7 +7,10 @@ import time
 core = Tk()
 core.title('Super epic game (definitely no exaggeration whatsoever)')
 #-------------Variable setup------------------#
-Stats = ['strength','defense','health','agility','inteligence']
+# Stats are strength, defense, health, agility, inteligence
+#items have a slot, and, when found, can be equipped in that slot.
+#there exists one of each item, and they are either in the 'not found' list or the '[slot]' list
+#the slots for items are head, neck, chest, belt, feet, hands, arms, weapon
 class Item:
     def __init__(self,slot,name,strength,defense,health,agility,intelligence):
         self.slot=slot
