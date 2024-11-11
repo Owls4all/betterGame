@@ -12,7 +12,26 @@ class Room:
         self.e = east
         self.w = west
     def orient(self,entry):
-        i = 7           
+        if searchList(entry,["north",0]):
+            self.f=self.s
+            self.b=self.n
+            self.l=self.e
+            self.r=self.w
+        elif entry == "west":
+            self.f=self.e
+            self.l=self.n
+            self.b=self.w
+            self.r=self.s
+        elif entry == 'south':
+            self.f=self.n
+            self.l=self.w
+            self.r=self.e
+            self.b=self.s
+        else:
+            self.f=self.w
+            self.b=self.e
+            self.l=self.s
+            self.r=self.n
         
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
