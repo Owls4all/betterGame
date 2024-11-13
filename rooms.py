@@ -1,7 +1,7 @@
 import random as r
 from utility import *
 class Room:
-    def __init__(self,left,right,forward,back,floor,north,south,east,west):
+    def __init__(self,left=None,right=None,forward=None,back=None,floor=0,north=None,south=None,east=None,west=None):
         self.l=left
         self.r=right
         self.f=forward
@@ -11,6 +11,11 @@ class Room:
         self.s = south
         self.e = east
         self.w = west
+        list_of_things=[]
+        for thing in [self.n,self.s,self.e,self.w]:
+            if thing != None:
+                list_of_things.append(thing)
+        self.exitsNumber=len(list_of_things)-1
     def orient(self,entry):
         if searchList(entry,["north",0]):
             self.f=self.s
@@ -35,8 +40,8 @@ class Room:
         
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
-surface=Room
-#1st floor rooms (some variation may occur)
+
+#1st floor rooms
 steps0=Room
 r00=Room
 r01=Room
@@ -46,10 +51,37 @@ r04=Room
 r05=Room
 r06=Room
 r07=Room
-r08=Room
-r09=Room
 steps1=Room
-#2nd floor rooms (some variation may occur)
+
+# first floor map assembly
+
+steps0.s=r00
+
+r00.n=steps0
+r00.w=r01
+
+r01.e=r00
+r01.n=r02
+
+r02.s=r01
+r02.w=r03
+r02.n=r04
+
+r03.e=r02
+
+r04.s=r02
+r04.e=r05
+r04.n=r06
+
+r05.w=r04
+
+r06.s=r04
+r06.w=r07
+r06.e=steps1
+
+steps1.w=r06
+
+#2nd floor rooms 
 steps2=Room
 r10=Room
 r11=Room
@@ -57,8 +89,35 @@ r12=Room
 r13=Room
 r14=Room
 r15=Room
+r16=Room
+r17=Room
 steps3=Room
-#3rd floor rooms (some variation may occur)
+
+#2nd floor map assembly
+
+#3rd floor rooms 
 steps4=Room
+r20=Room
+r21=Room
+r22=Room
+r23=Room
+r24=Room
+r25=Room
+r26=Room
+r27=Room
+steps5=Room
+
+#3rd floor map assembly
 
 
+# Special Rooms
+surface=Room
+bossfight=Room
+
+
+def genDungeon():
+    firstStair=r.randint(0,5)
+    
+    
+    
+    
