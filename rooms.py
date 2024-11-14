@@ -151,9 +151,23 @@ def genDungeon():
             nextDescent.s = stairs[secondStairs]
             secondFloor = floors[secondStairs]
     elif directions[secondStairs]== 'n':
-        
+        stairs[secondStairs].s = nextDescent
+        if nextDescent.s != None:
+            pass #figure something out
+        else:
+            nextDescent.n = stairs[secondStairs]
+            secondFloor = floors[secondStairs]
     else:
-
+        stairs[secondStairs].e=nextDescent
+        if nextDescent.w != None:
+            pass #figure something out
+        else:
+            nextDescent.w = stairs[secondStairs]
+    
+    #designate 4th stair
+    pruneFloors[secondFloor]
+    #choose 5th stair
+    #assign bossfight to 6th stair
     
 
 
