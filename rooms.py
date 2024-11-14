@@ -114,9 +114,51 @@ steps5=Room
 surface=Room
 bossfight=Room
 
-
+stairs=[steps0,steps1,steps2,steps3,steps4,steps5]
+directions=['s','w','n','w','w','s']
+floors=[0,0,1,1,2,2]
+def pruneFloors(floor):
+    while searchList(floor,floors):
+        stairs.__delitem__(indexInList(floor,floors))
+        directions.__delitem__(indexInList(floor,floors))
+        floors.__delitem__(indexInList(floor,floors))
 def genDungeon():
+    #choose first floor + staircase
     firstStair=r.randint(0,5)
+    if firstStair == 0 or firstStair == 5:
+        surface.s=stairs[firstStair]
+        stairs[firstStair].n=surface
+    elif searchList(firstStair,[1,3,4]):
+        surface.w=stairs[firstStair]
+        stairs[firstStair].e=surface
+    else:
+        surface.n=steps2
+        steps2.s=surface 
+    firstFloor=floors[firstStair]
+    if firstStair % 2 == 0:
+        nextDescent = stairs[firstFloor+1]
+    else:
+        nextDescent = stairs[firstFloor-1]
+    wayDown = directions[indexInList(nextDescent,stairs)]
+    pruneFloors(firstFloor)
+    #
+    secondStairs=r.randint(0,3)
+    if directions[secondStairs] == 's':
+        stairs[secondStairs].n = nextDescent
+        if nextDescent.s != None:
+            pass #figure something out
+        else:
+            nextDescent.s = stairs[secondStairs]
+            secondFloor = floors[secondStairs]
+    elif directions[secondStairs]== 'n':
+        
+    else:
+
+    
+
+
+
+    
     
     
     
