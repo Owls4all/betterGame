@@ -193,6 +193,7 @@ def pruneFloors(floor):
         stairs.__delitem__(indexInList(floor,floors))
         directions.__delitem__(indexInList(floor,floors))
         floors.__delitem__(indexInList(floor,floors))
+
 def genDungeon():
     #choose first floor + staircase
     firstStair=r.randint(0,5)
@@ -267,7 +268,9 @@ def travelBetweenRooms(room:Room):
             facing = angles[indexInList('backward',angles)+1]   
         elif choice == 'right':
             newRoom = room.r
-            facing = angles[indexInList('backward',angles)+3]    
+            facing = angles[indexInList('backward',angles)+3]  
+        if newRoom == 'Nothing':
+            newRoom=room.stair  
         newRoom.orient(facing)
         travelBetweenRooms(newRoom)
 travelBetweenRooms(surface)
