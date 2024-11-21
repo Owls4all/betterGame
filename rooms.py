@@ -1,7 +1,7 @@
 import random as r
 from utility import *
 class Room:
-    def __init__(self,left=None,right=None,forward=None,back=None,floor=0,north=None,south=None,east=None,west=None):
+    def __init__(self,left=None,right=None,forward=None,back=None,floor=0,north=None,south=None,east=None,west=None,stairConnection=None):
         self.l=left
         self.r=right
         self.f=forward
@@ -11,6 +11,8 @@ class Room:
         self.s = south
         self.e = east
         self.w = west
+        self.stair = stairConnection
+        self.facing = 'north'
         list_of_things=[]
         for thing in [self.n,self.s,self.e,self.w]:
             if thing != None:
@@ -22,21 +24,34 @@ class Room:
             self.b=self.n
             self.l=self.e
             self.r=self.w
+            self.facing = 'south'
         elif entry == "west":
             self.f=self.e
             self.l=self.n
             self.b=self.w
             self.r=self.s
+            self.facing = 'east'
         elif entry == 'south':
             self.f=self.n
             self.l=self.w
             self.r=self.e
             self.b=self.s
-        else:
+            self.facing = 'north'
+        elif entry == 'east':
             self.f=self.w
             self.b=self.e
             self.l=self.s
             self.r=self.n
+            self.facing = 'west'
+        elif self.stair !=None:
+            if self.w != None:
+                self.orient('east')
+            if self.e != None:
+                self.orient('west')
+            if self.n != None:
+                self.orient('south')
+            if self.s != None:
+                self.orient('north')
         
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
@@ -82,6 +97,7 @@ r06.e=steps1
 steps1.w=r06
 
 #2nd floor rooms 
+
 steps2=Room
 r10=Room
 r11=Room
@@ -94,6 +110,34 @@ r17=Room
 steps3=Room
 
 #2nd floor map assembly
+
+steps2.n = r10
+
+r10.s = steps2
+r10.e = r11
+
+r11.w = r10
+r11.s=r12
+r11.e=steps3
+r11.n=r13
+
+r12.n=r11
+
+r13.s=r11
+r13.e=r14
+r13.n=r15
+
+r14.w=r13
+
+r15.s=r13
+r15.w=r16
+
+r16.e=r15
+r16.s=r17
+
+r17.e=r16
+
+steps3.w=r11
 
 #3rd floor rooms 
 steps4=Room
@@ -108,7 +152,33 @@ r27=Room
 steps5=Room
 
 #3rd floor map assembly
+steps4.w=r20
 
+r20.e=steps4
+r20.w=r21
+r20.n=r22
+r20.s=r24
+
+r21.e=r20
+
+r22.s=r20
+r22.e=r23
+
+r23.w=r22
+
+r24.n=r22
+r24.e=r25
+r24.s=r26
+
+r25.w=r24
+
+r26.n=r24
+r26.w=r27
+
+r27.e=r26
+r27.n=steps5
+
+steps5.s=r27
 
 # Special Rooms
 surface=Room
@@ -125,55 +195,78 @@ def pruneFloors(floor):
 def genDungeon():
     #choose first floor + staircase
     firstStair=r.randint(0,5)
-    if firstStair == 0 or firstStair == 5:
-        surface.s=stairs[firstStair]
-        stairs[firstStair].n=surface
-    elif searchList(firstStair,[1,3,4]):
-        surface.w=stairs[firstStair]
-        stairs[firstStair].e=surface
-    else:
-        surface.n=steps2
-        steps2.s=surface 
+    surface.stair = stairs[firstStair]
+    stairs[firstStair] = surface
     firstFloor=floors[firstStair]
+
     if firstStair % 2 == 0:
         nextDescent = stairs[firstFloor+1]
     else:
         nextDescent = stairs[firstFloor-1]
-    wayDown = directions[indexInList(nextDescent,stairs)]
     pruneFloors(firstFloor)
-    #
-    secondStairs=r.randint(0,3)
-    if directions[secondStairs] == 's':
-        stairs[secondStairs].n = nextDescent
-        if nextDescent.s != None:
-            pass #figure something out
-        else:
-            nextDescent.s = stairs[secondStairs]
-            secondFloor = floors[secondStairs]
-    elif directions[secondStairs]== 'n':
-        stairs[secondStairs].s = nextDescent
-        if nextDescent.s != None:
-            pass #figure something out
-        else:
-            nextDescent.n = stairs[secondStairs]
-            secondFloor = floors[secondStairs]
+    #next floor
+
+    secondStairsUp=r.randint(0,3)
+    stairs[secondStairsUp].stair = nextDescent
+    nextDescent.stair=stairs[secondStairsUp]
+    secondFloor = floors[secondStairsUp]
+
+    if secondStairsUp%2 == 0:
+        fourthStair = stairs[secondStairsUp+1]
     else:
-        stairs[secondStairs].e=nextDescent
-        if nextDescent.w != None:
-            pass #figure something out
-        else:
-            nextDescent.w = stairs[secondStairs]
-    
-    #designate 4th stair
+        fourthStair = stairs[secondStairsUp-1]
+
     pruneFloors[secondFloor]
+    
+
     #choose 5th stair
-    #assign bossfight to 6th stair
+    anotherStair =r.randint(0,1)
+    fourthStair.stairs = stairs[anotherStair]
+    stairs[anotherStair] = fourthStair
+
+    if anotherStair %2 ==0:
+        finalStair = stairs[anotherStair+1]
+    else:
+        finalStair = stairs[anotherStair-1]
+
+    finalStair.stair = bossfight
+    bossfight.stair = finalStair
     
 
 
+def travelBetweenRooms(room:Room):
+    angles=['east','north','west','south']
+    options = ['back']
+    if room.stair != None:
+        options.append("stairs")
+    if room.l != None:
+        options.append('left')
+    if room.f != None:
+        options.append('forward')   
+    if room.r != None:
+        options.append('right')
+    
+    choice = ask('Which way do you want to go\n'+options)
+    if not searchList(choice,options):
+        print("you can't go that way from here!")
+        travelBetweenRooms(room)
+    else:
+        if choice == 'stairs':
+            newRoom = room.stair
+            facing = 'stair'
+            
+        elif choice == 'forward':
+            newRoom = room.f
+            facing = room.facing
+        elif choice == 'backward':
+            newRoom = room.b
+            facing = angles[indexInList('backward',angles)+2]   
+        elif choice == 'left':
+            newRoom = room.l
+            facing = angles[indexInList('backward',angles)+1]   
+        elif choice == 'right':
+            newRoom = room.l
+            facing = angles[indexInList('backward',angles)+3]    
+        newRoom.orient(facing)
 
-    
-    
-    
-    
-    
+travelBetweenRooms(surface)
