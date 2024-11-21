@@ -2,7 +2,7 @@ import random as r
 from utility import *
 no= 'Nothing'
 class Room:
-    def __init__(self,desc='a room',left='Nothing',right='Nothing',forward='Nothing',back='Nothing',floor=0,north='Nothing',south='Nothing',east='Nothing',west='Nothing',stairConnection='Nothing'):
+    def __init__(self,desc='no description??',left='Nothing',right='Nothing',forward='Nothing',back='Nothing',floor=0,north='Nothing',south='Nothing',east='Nothing',west='Nothing',stairConnection='Nothing'):
         self.l=left
         self.r=right
         self.f=forward
@@ -96,33 +96,33 @@ r07=Room()
 steps1=Room()
 
 # first floor map assembly
+def makeFirstFloor():
+    steps0.s=r00
 
-steps0.s=r00
+    r00.n=steps0
+    r00.w=r01
 
-r00.n=steps0
-r00.w=r01
+    r01.e=r00
+    r01.n=r02
 
-r01.e=r00
-r01.n=r02
+    r02s=r01    
+    r02.w=r03
+    r02.n=r04
 
-r02.s=r01
-r02.w=r03
-r02.n=r04
+    r03.e=r02
 
-r03.e=r02
+    r04.s=r02
+    r04.e=r05
+    r04.n=r06
 
-r04.s=r02
-r04.e=r05
-r04.n=r06
+    r05.w=r04
 
-r05.w=r04
+    r06.s=r04
+    r06.w=r07
+    r06.e=steps1
 
-r06.s=r04
-r06.w=r07
-r06.e=steps1
-
-steps1.w=r06
-
+    steps1.w=r06
+makeFirstFloor()
 #2nd floor rooms 
 
 steps2=Room()
@@ -137,34 +137,35 @@ r17=Room()
 steps3=Room()
 
 #2nd floor map assembly
+def makeSecondFloor():
+    steps2.n = r10
 
-steps2.n = r10
+    r10.s = steps2
+    r10.e = r11
 
-r10.s = steps2
-r10.e = r11
+    r11.w = r10
+    r11.s=r12
+    r11.e=steps3
+    r11.n=r13
 
-r11.w = r10
-r11.s=r12
-r11.e=steps3
-r11.n=r13
+    r12.n=r11
 
-r12.n=r11
+    r13.s=r11
+    r13.e=r14
+    r13.n=r15
 
-r13.s=r11
-r13.e=r14
-r13.n=r15
+    r14.w=r13
 
-r14.w=r13
+    r15.s=r13
+    r15.w=r16
 
-r15.s=r13
-r15.w=r16
+    r16.e=r15
+    r16.s=r17
 
-r16.e=r15
-r16.s=r17
+    r17.e=r16
 
-r17.e=r16
-
-steps3.w=r11
+    steps3.w=r11
+makeSecondFloor
 
 #3rd floor rooms 
 steps4=Room()
@@ -179,33 +180,35 @@ r27=Room()
 steps5=Room()
 
 #3rd floor map assembly
-steps4.w=r20
+def makeThirdFloor():
+    steps4.w=r20
 
-r20.e=steps4
-r20.w=r21
-r20.n=r22
-r20.s=r24
+    r20.e=steps4
+    r20.w=r21
+    r20.n=r22
+    r20.s=r24
 
-r21.e=r20
+    r21.e=r20
 
-r22.s=r20
-r22.e=r23
+    r22.s=r20
+    r22.e=r23
 
-r23.w=r22
+    r23.w=r22
 
-r24.n=r22
-r24.e=r25
-r24.s=r26
+    r24.n=r22
+    r24.e=r25
+    r24.s=r26
 
-r25.w=r24
+    r25.w=r24
 
-r26.n=r24
-r26.w=r27
+    r26.n=r24
+    r26.w=r27
 
-r27.e=r26
-r27.n=steps5
+    r27.e=r26
+    r27.n=steps5
 
-steps5.s=r27
+    steps5.s=r27
+makeThirdFloor()
 
 # Special Rooms
 surface=Room()
@@ -261,12 +264,19 @@ def genDungeon():
     finalStair.stair = bossfight
     bossfight.stair = finalStair
     
-genDungeon()
+genDungeon() #we're gonna do it the boring way until other stuff works better.
+surface.stair = steps0
+steps1.stair = steps2
+steps3.stair=steps4
+steps5.stair=bossfight
+surface.orient('stair')
 
 def travelBetweenRooms(room:Room):
     print(room.desc)
     angles=['east','north','west','south']
-    options = ['back']
+    options = []
+    if room.b != 'Nothing':
+        options.append('back')
     if room.stair != 'Nothing':
         options.append("stairs")
     if room.l != 'Nothing':
@@ -277,6 +287,8 @@ def travelBetweenRooms(room:Room):
         options.append('right')
     
     choice = ask('Which way do you want to go\n'+str(options))
+    if searchList(choice,['quit','exit','stop']):
+        return 'end the game'
     if not searchList(choice,options):
         print("you can't go that way from here!")
         travelBetweenRooms(room)
