@@ -1,7 +1,7 @@
 import random as r
 from utility import *
 class Room:
-    def __init__(self,left=None,right=None,forward=None,back=None,floor=0,north=None,south=None,east=None,west=None,stairConnection=None):
+    def __init__(self,left='Nothing',right='Nothing',forward='Nothing',back='Nothing',floor=0,north='Nothing',south='Nothing',east='Nothing',west='Nothing',stairConnection='Nothing'):
         self.l=left
         self.r=right
         self.f=forward
@@ -15,7 +15,7 @@ class Room:
         self.facing = 'north'
         list_of_things=[]
         for thing in [self.n,self.s,self.e,self.w]:
-            if thing != None:
+            if thing != 'Nothing':
                 list_of_things.append(thing)
         self.exitsNumber=len(list_of_things)-1
     def orient(self,entry):
@@ -43,30 +43,30 @@ class Room:
             self.l=self.s
             self.r=self.n
             self.facing = 'west'
-        elif self.stair !=None:
-            if self.w != None:
+        elif self.stair !='Nothing':
+            if self.w != 'Nothing':
                 self.orient('east')
-            if self.e != None:
+            if self.e != 'Nothing':
                 self.orient('west')
-            if self.n != None:
+            if self.n != 'Nothing':
                 self.orient('south')
-            if self.s != None:
+            if self.s != 'Nothing':
                 self.orient('north')
         
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
 
 #1st floor rooms
-steps0=Room
-r00=Room
-r01=Room
-r02=Room
-r03=Room
-r04=Room
-r05=Room
-r06=Room
-r07=Room
-steps1=Room
+steps0=Room()
+r00=Room()
+r01=Room()
+r02=Room()
+r03=Room()
+r04=Room()
+r05=Room()
+r06=Room()
+r07=Room()
+steps1=Room()
 
 # first floor map assembly
 
@@ -98,16 +98,16 @@ steps1.w=r06
 
 #2nd floor rooms 
 
-steps2=Room
-r10=Room
-r11=Room
-r12=Room
-r13=Room
-r14=Room
-r15=Room
-r16=Room
-r17=Room
-steps3=Room
+steps2=Room()
+r10=Room()
+r11=Room()
+r12=Room()
+r13=Room()
+r14=Room()
+r15=Room()
+r16=Room()
+r17=Room()
+steps3=Room()
 
 #2nd floor map assembly
 
@@ -140,16 +140,16 @@ r17.e=r16
 steps3.w=r11
 
 #3rd floor rooms 
-steps4=Room
-r20=Room
-r21=Room
-r22=Room
-r23=Room
-r24=Room
-r25=Room
-r26=Room
-r27=Room
-steps5=Room
+steps4=Room()
+r20=Room()
+r21=Room()
+r22=Room()
+r23=Room()
+r24=Room()
+r25=Room()
+r26=Room()
+r27=Room()
+steps5=Room()
 
 #3rd floor map assembly
 steps4.w=r20
@@ -181,8 +181,9 @@ r27.n=steps5
 steps5.s=r27
 
 # Special Rooms
-surface=Room
-bossfight=Room
+surface=Room()
+bossfight=Room()
+
 
 stairs=[steps0,steps1,steps2,steps3,steps4,steps5]
 directions=['s','w','n','w','w','s']
@@ -216,7 +217,7 @@ def genDungeon():
     else:
         fourthStair = stairs[secondStairsUp-1]
 
-    pruneFloors[secondFloor]
+    pruneFloors(secondFloor)
     
 
     #choose 5th stair
@@ -232,21 +233,21 @@ def genDungeon():
     finalStair.stair = bossfight
     bossfight.stair = finalStair
     
-
+genDungeon()
 
 def travelBetweenRooms(room:Room):
     angles=['east','north','west','south']
     options = ['back']
-    if room.stair != None:
+    if room.stair != 'Nothing':
         options.append("stairs")
-    if room.l != None:
+    if room.l != 'Nothing':
         options.append('left')
-    if room.f != None:
+    if room.f != 'Nothing':
         options.append('forward')   
-    if room.r != None:
+    if room.r != 'Nothing':
         options.append('right')
     
-    choice = ask('Which way do you want to go\n'+options)
+    choice = ask('Which way do you want to go\n'+str(options))
     if not searchList(choice,options):
         print("you can't go that way from here!")
         travelBetweenRooms(room)
@@ -268,5 +269,5 @@ def travelBetweenRooms(room:Room):
             newRoom = room.r
             facing = angles[indexInList('backward',angles)+3]    
         newRoom.orient(facing)
-
+        travelBetweenRooms(newRoom)
 travelBetweenRooms(surface)
