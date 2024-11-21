@@ -258,14 +258,14 @@ def travelBetweenRooms(room:Room):
         elif choice == 'forward':
             newRoom = room.f
             facing = room.facing
-        elif choice == 'backward':
+        elif choice == 'back':
             newRoom = room.b
             facing = angles[indexInList('backward',angles)+2]   
         elif choice == 'left':
             newRoom = room.l
             facing = angles[indexInList('backward',angles)+1]   
         elif choice == 'right':
-            newRoom = room.l
+            newRoom = room.r
             facing = angles[indexInList('backward',angles)+3]    
         newRoom.orient(facing)
 
