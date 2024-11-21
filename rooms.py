@@ -80,6 +80,7 @@ class Room:
                         self.desc = 'there is a door straight ahead'
                     else:
                         self.desc = 'it is a dead end'
+
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
 
