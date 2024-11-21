@@ -1,7 +1,8 @@
 import random as r
 from utility import *
+no= 'Nothing'
 class Room:
-    def __init__(self,left='Nothing',right='Nothing',forward='Nothing',back='Nothing',floor=0,north='Nothing',south='Nothing',east='Nothing',west='Nothing',stairConnection='Nothing'):
+    def __init__(self,desc='a room',left='Nothing',right='Nothing',forward='Nothing',back='Nothing',floor=0,north='Nothing',south='Nothing',east='Nothing',west='Nothing',stairConnection='Nothing'):
         self.l=left
         self.r=right
         self.f=forward
@@ -13,6 +14,7 @@ class Room:
         self.w = west
         self.stair = stairConnection
         self.facing = 'north'
+        self.desc=desc
         list_of_things=[]
         for thing in [self.n,self.s,self.e,self.w]:
             if thing != 'Nothing':
@@ -52,7 +54,32 @@ class Room:
                 self.orient('south')
             if self.s != 'Nothing':
                 self.orient('north')
-        
+        #making descriptions
+        if self.stair != 'Nothing':
+            desc='A room with stairs'
+        else:
+            if self.l != 'Nothing':
+                if self.r != 'Nothing':
+                    if self.f != 'Nothing':
+                        self.desc='There are doors to the left, to the right, and straight ahead'
+                    else:
+                        self.desc='There are doors to the left and to the right'
+                else:
+                    if self.f != no:
+                        self.desc= 'There is a door to the left and a door straight ahead'
+                    else:
+                        self.desc='there is a door to the left'
+            else:
+                if self.r != no:
+                    if self.f != no:
+                        self.desc ='there is a door to the right and a door straight ahead'
+                    else:
+                        self.desc='there is a door to the right'
+                else:
+                    if self.f != no:
+                        self.desc = 'there is a door straight ahead'
+                    else:
+                        self.desc = 'it is a dead end'
 #rooms have 'forward, back, left, right' ->this is determined by player's point of entry
 # they also have 'north south west east' ->this is absolute direction
 
@@ -237,6 +264,7 @@ def genDungeon():
 genDungeon()
 
 def travelBetweenRooms(room:Room):
+    print(room.desc)
     angles=['east','north','west','south']
     options = ['back']
     if room.stair != 'Nothing':
